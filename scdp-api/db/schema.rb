@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_26_214131) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_26_224014) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_26_214131) do
     t.datetime "updated_at", null: false
     t.index ["pause_type_id"], name: "index_pause_queues_on_pause_type_id"
     t.index ["team_id"], name: "index_pause_queues_on_team_id"
+    t.index ["user_id", "pause_type_id"], name: "index_unique_queue_per_user_pause_type", unique: true
     t.index ["user_id"], name: "index_pause_queues_on_user_id"
   end
 
@@ -37,7 +38,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_26_214131) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["team_id", "name"], name: "index_pause_types_on_team_id_and_name", unique: true
     t.index ["team_id"], name: "index_pause_types_on_team_id"
+    t.check_constraint "max_concurrent > 0", name: "check_positive_max_concurrent"
   end
 
   create_table "pauses", force: :cascade do |t|
@@ -53,6 +56,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_26_214131) do
     t.index ["pause_type_id"], name: "index_pauses_on_pause_type_id"
     t.index ["team_id"], name: "index_pauses_on_team_id"
     t.index ["user_id"], name: "index_pauses_on_user_id"
+    t.index ["user_id"], name: "index_unique_active_pause_per_user", unique: true, where: "(status = 0)"
+    t.check_constraint "selected_duration_minutes IS NULL OR selected_duration_minutes > 0", name: "check_positive_selected_duration"
   end
 
   create_table "team_memberships", force: :cascade do |t|
@@ -63,7 +68,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_26_214131) do
     t.boolean "pending", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email", "team_id"], name: "index_team_memberships_on_email_and_team_id", unique: true
     t.index ["team_id"], name: "index_team_memberships_on_team_id"
+    t.index ["user_id", "team_id"], name: "index_team_memberships_on_user_id_and_team_id", unique: true
     t.index ["user_id"], name: "index_team_memberships_on_user_id"
   end
 
@@ -83,6 +90,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_26_214131) do
     t.integer "role", default: 3
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["microsoft_uid"], name: "index_users_on_microsoft_uid", unique: true
   end
 
   add_foreign_key "pause_queues", "pause_types"

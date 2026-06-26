@@ -1,7 +1,7 @@
 class User < ApplicationRecord
+  # Relationships
   has_many :team_memberships, dependent: :destroy
   has_many :teams, through: :team_memberships
-
   has_many :pauses, dependent: :destroy
   has_many :pause_queues, dependent: :destroy
 
@@ -12,6 +12,7 @@ class User < ApplicationRecord
     agent: 3
   }
 
+  # Validations
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
   validates :microsoft_uid, uniqueness: true, allow_nil: true
