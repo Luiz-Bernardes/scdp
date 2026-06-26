@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  team: one
+  pause_type: one
+  selected_duration_minutes: 1
+  started_at: 2026-06-26 18:32:45
+  ended_at: 2026-06-26 18:32:45
+  status: 1
+
+two:
+  user: two
+  team: two
+  pause_type: two
+  selected_duration_minutes: 1
+  started_at: 2026-06-26 18:32:45
+  ended_at: 2026-06-26 18:32:45
+  status: 1
