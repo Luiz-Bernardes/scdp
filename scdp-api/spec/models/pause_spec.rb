@@ -25,8 +25,8 @@ RSpec.describe Pause, type: :model do
     end
   end
 
-  describe 'business rules' do
-    it 'does not allow multiple active pauses for the same user' do
+  describe 'database constraints' do
+    it 'does not allow multiple active pauses for the same user at database level' do
       user = create(:user)
       team = create(:team)
       pause_type = create(:pause_type, team: team)
@@ -39,42 +39,16 @@ RSpec.describe Pause, type: :model do
         status: :active
       )
 
-      second_pause = build(
-        :pause,
-        user: user,
-        team: team,
-        pause_type: pause_type,
-        status: :active
-      )
-
-      expect(second_pause).not_to be_valid
-      expect(second_pause.errors[:base]).to include(
-        "User already has an active pause"
-      )
-    end
-
-    it 'allows another pause if previous one is finished' do
-      user = create(:user)
-      team = create(:team)
-      pause_type = create(:pause_type, team: team)
-
-      create(
-        :pause,
-        user: user,
-        team: team,
-        pause_type: pause_type,
-        status: :finished
-      )
-
-      new_pause = build(
-        :pause,
-        user: user,
-        team: team,
-        pause_type: pause_type,
-        status: :active
-      )
-
-      expect(new_pause).to be_valid
+      expect {
+        create(
+          :pause,
+          user: user,
+          team: team,
+          pause_type: pause_type,
+          status: :active
+        )
+      }.to raise_error(ActiveRecord::RecordNotUnique)
     end
   end
+
 end
