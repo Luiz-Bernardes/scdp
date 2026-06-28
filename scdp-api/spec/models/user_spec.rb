@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:email) }
   it { should validate_uniqueness_of(:email) }
-  it { should validate_uniqueness_of(:microsoft_uid).allow_nil }
+  it { should validate_uniqueness_of(:provider_uid).allow_nil }
 
   it { should have_many(:team_memberships) }
   it { should have_many(:teams).through(:team_memberships) }

@@ -25,7 +25,8 @@ gem "bootsnap", require: false
 
 # Authentication with microsoft OAuth and jwt
 gem "omniauth"
-gem "omniauth-microsoft_graph"
+gem "omniauth-microsoft_graph" # microsoft auth
+gem "omniauth-google-oauth2" # google auth
 gem "jwt"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
@@ -43,6 +44,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Enviroment file rails reads
+  gem "dotenv-rails"
 
   # Rspec dependencies
   gem "rspec-rails"
