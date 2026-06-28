@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_26_224014) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_28_005808) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_26_224014) do
     t.datetime "requested_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "selected_duration_minutes"
     t.index ["pause_type_id"], name: "index_pause_queues_on_pause_type_id"
     t.index ["team_id"], name: "index_pause_queues_on_team_id"
     t.index ["user_id", "pause_type_id"], name: "index_unique_queue_per_user_pause_type", unique: true

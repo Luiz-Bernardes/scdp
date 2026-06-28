@@ -7,5 +7,6 @@ FactoryBot.define do
     position { 1 }
     status { "waiting" }
     requested_at { Time.current }
+    selected_duration_minutes { 10 }
   end
 end

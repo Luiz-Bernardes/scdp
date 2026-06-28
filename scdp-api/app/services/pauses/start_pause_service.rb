@@ -41,7 +41,8 @@ module Pauses
     def enqueue
       QueuePauseService.new(
         user: @user,
-        pause_type: @pause_type
+        pause_type: @pause_type,
+        selected_duration_minutes: @selected_duration_minutes
       ).call
     end
 
