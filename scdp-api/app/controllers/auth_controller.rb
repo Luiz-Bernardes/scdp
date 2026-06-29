@@ -1,17 +1,16 @@
 class AuthController < ApplicationController
+  skip_before_action :authenticate_user!
+
   def google
     auth = request.env['omniauth.auth']
 
     email = auth.info.email
     name = auth.info.name
-    google_uid = auth.uid
+    provider_uid = auth.uid
 
-    pending_membership = TeamMembership.find_by(
-      email: email,
-      pending: true
-    )
+    membership = TeamMembership.find_by(email: email)
 
-    unless pending_membership
+    unless membership
       return render json: {
         error: 'User not invited'
       }, status: :forbidden
@@ -21,13 +20,11 @@ class AuthController < ApplicationController
 
     user.update!(
       name: name,
-      google_uid: google_uid
+      provider: 'google',
+      provider_uid: provider_uid
     )
 
-    TeamMembership.where(
-      email: email,
-      pending: true
-    ).find_each do |membership|
+    TeamMembership.where(email: email).find_each do |membership|
       membership.update!(
         user: user,
         pending: false
