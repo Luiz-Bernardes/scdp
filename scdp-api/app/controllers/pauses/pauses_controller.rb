@@ -13,7 +13,7 @@ module Pauses
     rescue StandardError => e
       render json: {
         error: e.message
-      }, status: :unprocessable_entity
+      }, status: :unprocessable_content
     end
 
     def finish
