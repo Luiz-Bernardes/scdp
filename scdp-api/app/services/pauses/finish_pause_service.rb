@@ -11,6 +11,11 @@ module Pauses
           status: :finished
         )
 
+        Broadcasts::TeamPauseStateService.new(
+          team: @pause.team,
+          pause_type: @pause.pause_type
+        ).call
+
         process_queue
       end
 

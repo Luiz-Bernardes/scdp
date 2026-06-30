@@ -1,11 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Pauses::StartPauseService do
-  describe '#call' do
+  describe "#call" do
     let(:user) { create(:user) }
     let(:team) { create(:team) }
 
-    context 'when pause can be created' do
+    context "when pause can be created" do
       let(:pause_type) do
         create(
           :pause_type,
@@ -16,7 +16,14 @@ RSpec.describe Pauses::StartPauseService do
         )
       end
 
-      it 'creates a pause' do
+      it "creates a pause" do
+        expect(
+          Broadcasts::TeamPauseStateService
+        ).to receive(:new).with(
+          team: team,
+          pause_type: pause_type
+        ).and_call_original
+
         pause = described_class.new(
           user: user,
           pause_type: pause_type,
@@ -26,11 +33,11 @@ RSpec.describe Pauses::StartPauseService do
         expect(pause).to be_persisted
         expect(pause.user).to eq(user)
         expect(pause.pause_type).to eq(pause_type)
-        expect(pause.status).to eq('active')
+        expect(pause.status).to eq("active")
       end
     end
 
-    context 'when user already has an active pause' do
+    context "when user already has an active pause" do
       let(:pause_type) { create(:pause_type, team: team) }
 
       before do
@@ -43,18 +50,18 @@ RSpec.describe Pauses::StartPauseService do
         )
       end
 
-      it 'raises an error' do
+      it "raises an error" do
         expect {
           described_class.new(
             user: user,
             pause_type: pause_type,
             selected_duration_minutes: 10
           ).call
-        }.to raise_error(StandardError, 'User already has an active pause')
+        }.to raise_error(StandardError, "User already has an active pause")
       end
     end
 
-    context 'when pause requires duration and none is provided' do
+    context "when pause requires duration and none is provided" do
       let(:pause_type) do
         create(
           :pause_type,
@@ -63,17 +70,17 @@ RSpec.describe Pauses::StartPauseService do
         )
       end
 
-      it 'raises an error' do
+      it "raises an error" do
         expect {
           described_class.new(
             user: user,
             pause_type: pause_type
           ).call
-        }.to raise_error(StandardError, 'Duration is required')
+        }.to raise_error(StandardError, "Duration is required")
       end
     end
 
-    context 'when pause limit is reached and queue is enabled' do
+    context "when pause limit is reached and queue is enabled" do
       let(:pause_type) do
         create(
           :pause_type,
@@ -93,7 +100,7 @@ RSpec.describe Pauses::StartPauseService do
         )
       end
 
-      it 'creates a queue entry' do
+      it "creates a queue entry" do
         queue = described_class.new(
           user: user,
           pause_type: pause_type,
@@ -105,7 +112,7 @@ RSpec.describe Pauses::StartPauseService do
       end
     end
 
-    context 'when pause limit is reached and queue is disabled' do
+    context "when pause limit is reached and queue is disabled" do
       let(:pause_type) do
         create(
           :pause_type,
@@ -125,14 +132,14 @@ RSpec.describe Pauses::StartPauseService do
         )
       end
 
-      it 'raises an error' do
+      it "raises an error" do
         expect {
           described_class.new(
             user: user,
             pause_type: pause_type,
             selected_duration_minutes: 10
           ).call
-        }.to raise_error(StandardError, 'Pause limit reached')
+        }.to raise_error(StandardError, "Pause limit reached")
       end
     end
   end

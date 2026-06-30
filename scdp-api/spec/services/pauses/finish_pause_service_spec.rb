@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Pauses::FinishPauseService do
-  describe '#call' do
+  describe "#call" do
     let(:team) { create(:team) }
     let(:pause_type) { create(:pause_type, team: team) }
     let(:pause) do
@@ -13,19 +13,26 @@ RSpec.describe Pauses::FinishPauseService do
       )
     end
 
-    it 'finishes the pause' do
+    it "finishes the pause" do
+      expect(
+        Broadcasts::TeamPauseStateService
+      ).to receive(:new).with(
+        team: team,
+        pause_type: pause_type
+      ).and_call_original
+
       described_class.new(pause: pause).call
 
-      expect(pause.reload.status).to eq('finished')
+      expect(pause.reload.status).to eq("finished")
     end
 
-    it 'sets ended_at' do
+    it "sets ended_at" do
       described_class.new(pause: pause).call
 
       expect(pause.reload.ended_at).to be_present
     end
 
-    it 'processes the queue' do
+    it "processes the queue" do
       queued_user = create(:user)
 
       queue = create(
@@ -33,13 +40,13 @@ RSpec.describe Pauses::FinishPauseService do
         user: queued_user,
         team: team,
         pause_type: pause_type,
-        status: 'waiting',
+        status: "waiting",
         position: 1
       )
 
       described_class.new(pause: pause).call
 
-      expect(queue.reload.status).to eq('processed')
+      expect(queue.reload.status).to eq("processed")
       expect(
         Pause.where(
           user: queued_user,

@@ -47,7 +47,7 @@ module Pauses
     end
 
     def create_pause
-      Pause.create!(
+      pause = Pause.create!(
         user: @user,
         team: @team,
         pause_type: @pause_type,
@@ -55,6 +55,13 @@ module Pauses
         started_at: Time.current,
         status: :active
       )
+
+      Broadcasts::TeamPauseStateService.new(
+        team: pause.team,
+        pause_type: pause.pause_type
+      ).call
+
+      pause
     end
   end
 end
