@@ -6,5 +6,6 @@ FactoryBot.define do
     max_concurrent { 2 }
     requires_queue { true }
     active { true }
+    max_duration_minutes { 120 }
   end
 end
