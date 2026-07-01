@@ -15,5 +15,7 @@ Rails.application.routes.draw do
     get :current, to: 'pauses#current'
     get :history, to: 'pauses#history'
   end
+
+  get "/teams/:id/pause_board", to: "teams#pause_board"
 end
 
