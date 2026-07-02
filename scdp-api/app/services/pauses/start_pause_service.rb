@@ -4,7 +4,7 @@ module Pauses
       @user = user
       @pause_type = pause_type
       @team = pause_type.team
-      @selected_duration_minutes = selected_duration_minutes
+      @selected_duration_minutes = selected_duration_minutes&.to_i
     end
 
     def call
@@ -70,5 +70,8 @@ module Pauses
 
       Time.current + selected_duration_minutes.minutes
     end  
+
+    attr_reader :selected_duration_minutes
+
   end
 end
