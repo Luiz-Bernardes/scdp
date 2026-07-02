@@ -53,6 +53,7 @@ module Pauses
         pause_type: @pause_type,
         selected_duration_minutes: @selected_duration_minutes,
         started_at: Time.current,
+        expires_at: calculate_expires_at,
         status: :active
       )
 
@@ -63,5 +64,11 @@ module Pauses
 
       pause
     end
+
+    def calculate_expires_at
+      return nil unless selected_duration_minutes.present?
+
+      Time.current + selected_duration_minutes.minutes
+    end  
   end
 end
