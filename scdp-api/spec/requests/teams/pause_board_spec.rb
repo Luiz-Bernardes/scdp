@@ -35,10 +35,10 @@ RSpec.describe "Teams::PauseBoard", type: :request do
 
       create(
         :pause,
+        :active,
         user: user,
         team: team,
-        pause_type: pause_type,
-        status: :active
+        pause_type: pause_type   
       )
     end
 

@@ -31,11 +31,21 @@ module Teams
                            .order(:started_at)
 
       slots = active_pauses.map do |pause|
+        timer = Pauses::TimerService.new(
+          pause: pause
+        )
+
         {
           pause_id: pause.id,
           user_name: pause.user.name,
           selected_duration_minutes: pause.selected_duration_minutes,
-          started_at: pause.started_at
+          started_at: pause.started_at,
+          expires_at: pause.expires_at,
+          remaining_seconds: timer.remaining_seconds,
+          overtime_seconds: timer.overtime_seconds,
+          expired: timer.expired?,
+          status: timer.status,
+          progress_percentage: timer.progress_percentage
         }
       end
 

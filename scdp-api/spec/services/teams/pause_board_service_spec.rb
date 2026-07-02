@@ -3,70 +3,82 @@ require "rails_helper"
 RSpec.describe Teams::PauseBoardService do
   describe "#call" do
     let(:team) { create(:team) }
+    let(:user) { create(:user) }
 
     let!(:pause_type) do
       create(
         :pause_type,
         team: team,
-        name: "intervalo",
-        max_concurrent: 3,
-        active: true
+        max_concurrent: 2
       )
     end
 
-    let!(:old_pause) do
+    let!(:pause) do
       create(
         :pause,
+        :active,
+        user: user,
         team: team,
         pause_type: pause_type,
-        status: :active,
-        started_at: 20.minutes.ago
+        selected_duration_minutes: 10,
+        started_at: 5.minutes.ago,
+        expires_at: 5.minutes.from_now
       )
     end
 
-    let!(:new_pause) do
-      create(
-        :pause,
-        team: team,
-        pause_type: pause_type,
-        status: :active,
-        started_at: 10.minutes.ago
-      )
+    subject(:result) do
+      described_class.new(team: team).call
     end
 
-    let!(:finished_pause) do
-      create(
-        :pause,
-        team: team,
-        pause_type: pause_type,
-        status: :finished
-      )
-    end
-
-    it "returns the pause board state" do
-      result = described_class.new(
-        team: team
-      ).call
-
+    it "returns the pause board for the team" do
       expect(result[:team_id]).to eq(team.id)
       expect(result[:pause_types].size).to eq(1)
+    end
 
-      pause_board = result[:pause_types].first
+    it "includes active pauses in slots" do
+      slots = result[:pause_types].first[:slots]
 
-      expect(pause_board[:name]).to eq("intervalo")
-      expect(pause_board[:slots].size).to eq(3)
+      expect(slots.first[:pause_id]).to eq(pause.id)
+      expect(slots.first[:user_name]).to eq(user.name)
+      expect(slots.first[:selected_duration_minutes]).to eq(10)
+      expect(slots.first[:started_at]).to eq(pause.started_at)
+    end
 
-      expect(
-        pause_board[:slots][0][:pause_id]
-      ).to eq(old_pause.id)
+    it "includes timer metadata" do
+      slot = result[:pause_types].first[:slots].first
 
-      expect(
-        pause_board[:slots][1][:pause_id]
-      ).to eq(new_pause.id)
+      expect(slot[:expires_at]).to eq(pause.expires_at)
+      expect(slot[:remaining_seconds]).to be > 0
+      expect(slot[:overtime_seconds]).to eq(0)
+      expect(slot[:expired]).to eq(false)
+      expect(slot[:status]).to eq("running")
+      expect(slot[:progress_percentage]).to be_between(0, 100)
+    end
 
-      expect(
-        pause_board[:slots][2]
-      ).to be_nil
+    it "fills empty slots with nil" do
+      slots = result[:pause_types].first[:slots]
+
+      expect(slots.size).to eq(2)
+      expect(slots.last).to be_nil
+    end
+
+    context "when pause is expired" do
+      before do
+        pause.update!(
+          started_at: 15.minutes.ago,
+          expires_at: 5.minutes.ago
+        )
+      end
+
+      it "returns overtime information" do
+        slot = result[:pause_types].first[:slots].first
+
+        expect(slot[:remaining_seconds]).to eq(0)
+        expect(slot[:overtime_seconds]).to be > 0
+        expect(slot[:expired]).to eq(true)
+        expect(slot[:status]).to eq("expired")
+        expect(slot[:progress_percentage]).to eq(100)
+      end
     end
   end
 end
