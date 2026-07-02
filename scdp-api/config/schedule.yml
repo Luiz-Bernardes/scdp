@@ -1,0 +1,4 @@
+expire_pauses:
+  cron: "*/1 * * * *"
+  class: "Pauses::ExpirePausesJob"
+  queue: default
