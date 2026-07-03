@@ -14,18 +14,27 @@ RSpec.describe "Auth", type: :request do
         )
       end
 
-      it "creates the user and returns a token" do
+      it "creates the user and redirects to the frontend with a token" do
         get "/auth/google_oauth2/callback"
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:found)
 
-        body = JSON.parse(response.body)
+        location = response.headers["Location"]
 
-        expect(body["token"]).to be_present
+        expect(location).to start_with(
+          "http://localhost:3000/auth/callback?token="
+        )
 
-        user = User.last
+        token = CGI.parse(
+          URI.parse(location).query
+        )["token"].first
 
-        expect(user.email).to eq("luizhenbernardes@gmail.com")
+        expect(token).to be_present
+
+        user = User.find_by(email: "luizhenbernardes@gmail.com")
+
+        expect(user).to be_present
+        expect(user.name).to eq("Luiz Bernardes")
         expect(user.provider).to eq("google")
         expect(user.provider_uid).to eq("123456789")
       end

@@ -6,7 +6,7 @@ class AuthController < ApplicationController
       auth: request.env['omniauth.auth']
     ).call
 
-    render json: result
+    redirect_to result[:redirect_url], allow_other_host: true
   rescue Auth::UnauthorizedError => e
     render json: {
       error: e.message

@@ -9,10 +9,10 @@ module Auth
 
       user = find_or_create_user!
       link_memberships!(user)
+      token = generate_token(user)
 
       {
-        token: generate_token(user),
-        user: user
+        redirect_url: "http://localhost:3000/auth/callback?token=#{token}"
       }
     end
 
