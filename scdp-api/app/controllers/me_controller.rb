@@ -4,7 +4,8 @@ class MeController < ApplicationController
       id: current_user.id,
       name: current_user.name,
       email: current_user.email,
-      role: current_user.role
+      role: current_user.role,
+      team_ids: current_user.teams.pluck(:id)
     }
   end
 end
