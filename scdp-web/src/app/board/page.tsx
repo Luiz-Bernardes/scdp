@@ -5,26 +5,10 @@ import { useRouter } from "next/navigation";
 
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
-
-type Slot = {
-  pause_id: number;
-  user_name: string;
-  selected_duration_minutes: number;
-  started_at: string;
-  expires_at: string | null;
-  remaining_seconds: number | null;
-} | null;
-
-type PauseType = {
-  id: number;
-  name: string;
-  slots: Slot[];
-};
-
-type PauseBoard = {
-  team_id: number;
-  pause_types: PauseType[];
-};
+// Types
+import { PauseBoard } from "@/types/board";
+// Services
+import { getPauseBoard } from "@/services/board-service";
 
 export default function BoardPage() {
   const router = useRouter();
@@ -45,14 +29,12 @@ export default function BoardPage() {
       return;
     }
 
-    api
-      .get(`/teams/${user.team_ids[0]}/pause_board`)
-      .then((response) => {
-        setBoard(response.data);
-      })
+    getPauseBoard(user.team_ids[0])
+      .then(setBoard)
       .finally(() => {
         setLoading(false);
       });
+
   }, [router, user]);
 
   if (loading) {
