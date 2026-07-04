@@ -1,41 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-
-import { api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
-// Types
-import { PauseBoard } from "@/types/board";
-// Services
-import { getPauseBoard } from "@/services/board-service";
+import { usePauseBoard } from "@/hooks/usePauseBoard";
 
 export default function BoardPage() {
-  const router = useRouter();
 
   const user = useAuthStore((state) => state.user);
 
-  const [board, setBoard] = useState<PauseBoard | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!user) {
-      router.push("/");
-      return;
-    }
-
-    if (user.team_ids.length === 0) {
-      setLoading(false);
-      return;
-    }
-
-    getPauseBoard(user.team_ids[0])
-      .then(setBoard)
-      .finally(() => {
-        setLoading(false);
-      });
-
-  }, [router, user]);
+  const { board, loading } = usePauseBoard(user?.team_ids[0]);
 
   if (loading) {
     return <p className="p-8">Carregando...</p>;
@@ -83,15 +55,11 @@ export default function BoardPage() {
                     </h3>
 
                     <p>
-                      Duração:
-                      {" "}
-                      {slot.selected_duration_minutes} min
+                      Duração: {slot.selected_duration_minutes} min
                     </p>
 
                     <p>
-                      Restante:
-                      {" "}
-                      {slot.remaining_seconds}s
+                      Restante: {slot.remaining_seconds}s
                     </p>
 
                     <p className="text-xs text-gray-500 mt-3">
