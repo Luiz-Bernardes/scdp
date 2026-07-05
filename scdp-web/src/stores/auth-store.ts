@@ -1,12 +1,5 @@
 import { create } from "zustand";
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  team_ids: number[];
-};
+import { User } from "@/types/user";
 
 type AuthStore = {
   token: string | null;
