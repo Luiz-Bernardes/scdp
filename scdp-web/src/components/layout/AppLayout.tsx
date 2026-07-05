@@ -15,8 +15,13 @@ export function AppLayout({
 
       <Header />
 
-      <main className="flex-1 bg-gray-50">
-        {children}
+      <main
+        className="
+          flex-1
+          bg-[#f8f8f8]
+        "
+      >
+          {children}
       </main>
 
       <Footer />
