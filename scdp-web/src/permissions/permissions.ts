@@ -1,21 +1,26 @@
-import { Role } from "./roles";
+export const permissions = {
+  super_admin: [
+    "manage_system",
+    "manage_users",
+    "manage_teams",
+    "manage_pause_types",
+    "view_reports"
+  ],
 
-export function canAccessAdmin(role?: string) {
-  return role === Role.SuperAdmin || role === Role.Admin;
-}
+  admin: [
+    "manage_users",
+    "manage_teams",
+    "manage_pause_types",
+    "view_reports"
+  ],
 
-export function canManageUsers(role?: string) {
-  return canAccessAdmin(role);
-}
+  supervisor: [
+    "view_team",
+    "manage_team_queue",
+    "finish_pauses"
+  ],
 
-export function canManageTeams(role?: string) {
-  return canAccessAdmin(role);
-}
-
-export function canManagePauseTypes(role?: string) {
-  return canAccessAdmin(role);
-}
-
-export function canViewDashboard(role?: string) {
-  return role !== undefined;
-}
+  agent: [
+    "use_pause_board"
+  ]
+} as const;
