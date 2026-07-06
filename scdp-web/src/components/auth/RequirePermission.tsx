@@ -6,6 +6,8 @@ import { can } from "@/permissions/can";
 import { Permission } from "@/permissions/permissions";
 import { useAuthStore } from "@/stores/auth-store";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { AccessDenied } from "@/components/auth/AccessDenied";
+import { Loading } from "@/components/ui/Loading";
 
 type Props = {
   permission: Permission;
@@ -18,13 +20,16 @@ export function RequirePermission({
 }: Props) {
   const user = useAuthStore((state) => state.user);
 
+  const initialized = useAuthStore(
+      (state) => state.initialized
+  );
+
+  if (!initialized) {
+      return <Loading />;
+  }
+
   if (!can(user, permission)) {
-      return (
-          <EmptyState
-              title="Acesso negado"
-              description="Você não possui permissão para acessar esta página."
-          />
-      );
+      return <AccessDenied />;
   }
 
   return <>{children}</>;

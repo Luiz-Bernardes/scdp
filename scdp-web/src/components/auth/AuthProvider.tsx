@@ -1,22 +1,24 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
 
-export default function AuthCallbackPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
+export function AuthProvider({
+  children
+}: {
+  children: React.ReactNode;
+}) {
   const setAuth = useAuthStore((state) => state.setAuth);
+  const setInitialized = useAuthStore(
+    (state) => state.setInitialized
+  );
 
   useEffect(() => {
-    const token = searchParams.get("token");
+    const token = localStorage.getItem("token");
 
     if (!token) {
-      router.push("/");
+      setInitialized(true);
       return;
     }
 
@@ -28,18 +30,13 @@ export default function AuthCallbackPage() {
       })
       .then((response) => {
         setAuth(token, response.data);
-
-        router.push("/dashboard");
       })
       .catch(() => {
         localStorage.removeItem("token");
-        router.push("/");
+        setInitialized(true);
       });
-  }, [router, searchParams, setAuth]);
 
-  return (
-    <main className="flex min-h-screen items-center justify-center">
-      <p>Autenticando...</p>
-    </main>
-  );
+  }, [setAuth, setInitialized]);
+
+  return children;
 }
