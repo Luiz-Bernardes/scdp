@@ -38,11 +38,11 @@ RSpec.describe Pauses::ExpirePausesJob, type: :job do
 
       expect(
         expired_pause.reload.status
-      ).to eq("expired")
+      ).to eq("waiting_return")
 
       expect(
         expired_pause.ended_at
-      ).to be_present
+      ).to be_nil
     end
 
     it "does not expire valid pauses" do
@@ -53,7 +53,7 @@ RSpec.describe Pauses::ExpirePausesJob, type: :job do
       ).to eq("active")
     end
 
-    it "processes queue after expiring" do
+    it "does not process queue while waiting_return" do
       queued_user = create(:user)
 
       queue = create(
@@ -67,17 +67,14 @@ RSpec.describe Pauses::ExpirePausesJob, type: :job do
 
       described_class.perform_now
 
-      expect(
-        queue.reload.status
-      ).to eq("processed")
+      expect(queue.reload.status).to eq("waiting")
 
       expect(
         Pause.where(
           user: queued_user,
-          pause_type: pause_type,
-          status: :active
+          pause_type: pause_type
         )
-      ).to exist
+      ).not_to exist
     end
   end
 end

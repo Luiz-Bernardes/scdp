@@ -1,5 +1,5 @@
 module Pauses
-  class StartPauseService
+  class ReservePauseService
     def initialize(user:, pause_type:, selected_duration_minutes: nil)
       @user = user
       @pause_type = pause_type
@@ -13,6 +13,7 @@ module Pauses
 
       if pause_limit_reached?
         return enqueue if @pause_type.requires_queue?
+
         raise StandardError, "Pause limit reached"
       end
 
@@ -35,7 +36,8 @@ module Pauses
     end
 
     def pause_limit_reached?
-      @pause_type.pauses.occupying_slot.count >= @pause_type.max_concurrent
+      @pause_type.pauses.occupying_slot.count >=
+        @pause_type.max_concurrent
     end
 
     def enqueue
@@ -69,9 +71,8 @@ module Pauses
       return nil unless selected_duration_minutes.present?
 
       Time.current + selected_duration_minutes.minutes
-    end  
+    end
 
     attr_reader :selected_duration_minutes
-
   end
 end

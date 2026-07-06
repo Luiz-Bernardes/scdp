@@ -7,8 +7,8 @@ module Pauses
     def call
       ActiveRecord::Base.transaction do
         @pause.update!(
-          ended_at: Time.current,
-          status: :finished
+          status: :finished,
+          ended_at: Time.current
         )
 
         Broadcasts::TeamPauseStateService.new(

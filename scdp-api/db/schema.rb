@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_02_203122) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_06_223557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,7 +59,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_02_203122) do
     t.index ["pause_type_id"], name: "index_pauses_on_pause_type_id"
     t.index ["team_id"], name: "index_pauses_on_team_id"
     t.index ["user_id"], name: "index_pauses_on_user_id"
-    t.index ["user_id"], name: "index_unique_active_pause_per_user", unique: true, where: "(status = 0)"
+    t.index ["user_id"], name: "index_unique_running_pause_per_user", unique: true, where: "(status = ANY (ARRAY[0, 1, 2]))"
     t.check_constraint "selected_duration_minutes IS NULL OR selected_duration_minutes > 0", name: "check_positive_selected_duration"
   end
 

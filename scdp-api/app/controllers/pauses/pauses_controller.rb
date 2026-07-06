@@ -46,7 +46,7 @@ module Pauses
 
     def history
       pauses = current_user.pauses
-                           .where.not(status: :active)
+                           .where(status: :finished)
                            .order(started_at: :desc)
 
       render json: pauses

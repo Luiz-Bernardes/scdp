@@ -22,7 +22,7 @@ module Broadcasts
     attr_reader :team, :pause_type
 
     def slots_payload
-      active_pauses = Pause.active
+      active_pauses = Pause.occupying_slot
                            .includes(:user)
                            .where(
                              team: team,

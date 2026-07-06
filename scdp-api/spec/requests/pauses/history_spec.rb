@@ -30,7 +30,7 @@ RSpec.describe "Pauses::History", type: :request do
         user: user,
         team: team,
         pause_type: pause_type,
-        status: :cancelled
+        status: :finished
       )
     end
 

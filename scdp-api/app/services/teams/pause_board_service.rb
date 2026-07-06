@@ -22,7 +22,7 @@ module Teams
     attr_reader :team
 
     def build_slots(pause_type)
-      active_pauses = Pause.active
+      active_pauses = Pause.occupying_slot
                            .includes(:user)
                            .where(
                              team: team,

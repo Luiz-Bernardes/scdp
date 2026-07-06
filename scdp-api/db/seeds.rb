@@ -188,6 +188,6 @@ puts
 puts "Time: #{team.name}"
 puts "Usuários: #{User.count}"
 puts "Tipos de pausa: #{PauseType.count}"
-puts "Pausas ativas: #{Pause.active.count}"
+puts "Pausas ativas: #{Pause.occupying_slot.count}"
 puts "Fila: #{PauseQueue.count}"
 puts

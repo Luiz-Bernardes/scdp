@@ -3,7 +3,7 @@ module Pauses
     queue_as :default
 
     def perform
-      Pause.active
+      Pause.occupying_slot
            .includes(:pause_type, :team)
            .find_each do |pause|
 
@@ -29,13 +29,8 @@ module Pauses
     def expire!(pause)
       Pause.transaction do
         pause.update!(
-          status: :expired,
-          ended_at: Time.current
+          status: :waiting_return
         )
-
-        Pauses::FinishPauseService.new(
-          pause: pause
-        ).send(:process_queue)
 
         Broadcasts::TeamPauseStateService.new(
           team: pause.team,
@@ -43,5 +38,6 @@ module Pauses
         ).call
       end
     end
+    
   end
 end
