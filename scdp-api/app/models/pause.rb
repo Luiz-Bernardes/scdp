@@ -1,5 +1,4 @@
 class Pause < ApplicationRecord
-  # Relationships
   belongs_to :user
   belongs_to :team
   belongs_to :pause_type
@@ -11,19 +10,7 @@ class Pause < ApplicationRecord
     finished: 3
   }
 
-  # Validations
   validates :started_at, presence: true
-
-  # Scopes
-  scope :occupying_slot, -> {
-    where(
-      status: [
-        :reserved,
-        :active,
-        :waiting_return
-      ]
-    )
-  }
 
   # Methods
   def occupying_slot?
@@ -37,4 +24,33 @@ class Pause < ApplicationRecord
   def waiting?
     waiting_return?
   end
+
+  def can_start?
+    reserved?
+  end
+
+  def can_finish?
+    active? || waiting_return?
+  end
+
+  def running?
+    active?
+  end
+
+  # Scopes
+  scope :running, -> {
+    where(status: :active)
+  }
+
+  scope :occupying_slot, -> {
+    where(status: %i[
+      reserved
+      active
+      waiting_return
+    ])
+  }
+
+  scope :history, -> {
+    where(status: :finished)
+  }
 end

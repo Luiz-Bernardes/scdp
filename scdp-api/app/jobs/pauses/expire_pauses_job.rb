@@ -3,7 +3,7 @@ module Pauses
     queue_as :default
 
     def perform
-      Pause.occupying_slot
+      Pause.running
            .includes(:pause_type, :team)
            .find_each do |pause|
 
