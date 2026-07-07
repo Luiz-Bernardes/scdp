@@ -16,7 +16,7 @@ module Pauses
           pause_type: @pause.pause_type
         ).call
 
-        process_queue
+        reserve_next_in_queue
       end
 
       @pause
@@ -24,7 +24,7 @@ module Pauses
 
     private
 
-    def process_queue
+    def reserve_next_in_queue
       next_in_queue = PauseQueue
         .where(
           pause_type: @pause.pause_type,
@@ -35,13 +35,18 @@ module Pauses
 
       return unless next_in_queue
 
-      Pauses::StartPauseService.new(
+      pause = Pauses::ReservePauseService.new(
         user: next_in_queue.user,
         pause_type: next_in_queue.pause_type,
         selected_duration_minutes: next_in_queue.selected_duration_minutes
       ).call
 
-      next_in_queue.update!(status: "processed")
+      next_in_queue.update!(
+        status: "processed",
+        requested_at: Time.current
+      )
+
+      pause
     end
   end
 end

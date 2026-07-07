@@ -47,13 +47,15 @@ RSpec.describe Pauses::FinishPauseService do
       described_class.new(pause: pause).call
 
       expect(queue.reload.status).to eq("processed")
-      expect(
-        Pause.where(
-          user: queued_user,
-          pause_type: pause_type,
-          status: :active
-        )
-      ).to exist
+      reserved_pause = Pause.find_by(
+        user: queued_user,
+        pause_type: pause_type
+      )
+
+      expect(reserved_pause).to be_present
+      expect(reserved_pause.status).to eq("reserved")
+      expect(reserved_pause.started_at).to be_nil
+      expect(reserved_pause.expires_at).to be_nil
     end
   end
 end
