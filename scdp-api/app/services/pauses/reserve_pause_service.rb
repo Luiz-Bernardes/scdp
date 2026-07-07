@@ -17,10 +17,12 @@ module Pauses
         raise StandardError, "Pause limit reached"
       end
 
-      create_pause
+      create_reserved_pause
     end
 
     private
+
+    attr_reader :selected_duration_minutes
 
     def validate_active_pause!
       return unless @user.pauses.occupying_slot.exists?
@@ -30,7 +32,7 @@ module Pauses
 
     def validate_duration!
       return unless @pause_type.has_time_limit?
-      return if @selected_duration_minutes.present?
+      return if selected_duration_minutes.present?
 
       raise StandardError, "Duration is required"
     end
@@ -44,19 +46,17 @@ module Pauses
       QueuePauseService.new(
         user: @user,
         pause_type: @pause_type,
-        selected_duration_minutes: @selected_duration_minutes
+        selected_duration_minutes: selected_duration_minutes
       ).call
     end
 
-    def create_pause
+    def create_reserved_pause
       pause = Pause.create!(
         user: @user,
         team: @team,
         pause_type: @pause_type,
-        selected_duration_minutes: @selected_duration_minutes,
-        started_at: Time.current,
-        expires_at: calculate_expires_at,
-        status: :active
+        selected_duration_minutes: selected_duration_minutes,
+        status: :reserved
       )
 
       Broadcasts::TeamPauseStateService.new(
@@ -66,13 +66,5 @@ module Pauses
 
       pause
     end
-
-    def calculate_expires_at
-      return nil unless selected_duration_minutes.present?
-
-      Time.current + selected_duration_minutes.minutes
-    end
-
-    attr_reader :selected_duration_minutes
   end
 end

@@ -10,7 +10,7 @@ class Pause < ApplicationRecord
     finished: 3
   }
 
-  validates :started_at, presence: true
+  validates :started_at,presence: true, unless: :reserved?
 
   # Methods
   def occupying_slot?
