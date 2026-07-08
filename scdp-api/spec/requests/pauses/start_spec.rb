@@ -1,14 +1,28 @@
 require "rails_helper"
 
 RSpec.describe "Pauses::Start", type: :request do
-  describe "POST /pauses/start" do
+  describe "POST /pauses/:id/start" do
     let(:user) { create(:user) }
     let(:team) { create(:team) }
+
     let(:pause_type) do
       create(
         :pause_type,
         team: team,
         has_time_limit: true
+      )
+    end
+
+    let(:pause) do
+      create(
+        :pause,
+        user: user,
+        team: team,
+        pause_type: pause_type,
+        status: :reserved,
+        started_at: nil,
+        expires_at: nil,
+        selected_duration_minutes: 10
       )
     end
 
@@ -22,34 +36,28 @@ RSpec.describe "Pauses::Start", type: :request do
       }
     end
 
-    it "starts a pause" do
-      post "/pauses/start",
-           params: {
-             pause_type_id: pause_type.id,
-             selected_duration_minutes: 10
-           },
+    it "starts a reserved pause" do
+      post "/pauses/#{pause.id}/start",
            headers: headers
 
-      expect(response).to have_http_status(:created)
+      expect(response).to have_http_status(:ok)
 
-      pause = Pause.last
+      pause.reload
 
-      expect(pause.user).to eq(user)
       expect(pause.status).to eq("active")
+      expect(pause.started_at).to be_present
+      expect(pause.expires_at).to be_present
     end
 
-    it "returns error when duration is missing" do
-      post "/pauses/start",
-           params: {
-             pause_type_id: pause_type.id
-           },
+    it "returns not found when pause does not exist" do
+      post "/pauses/999/start",
            headers: headers
 
-      expect(response).to have_http_status(:unprocessable_content)
+      expect(response).to have_http_status(:not_found)
 
       body = JSON.parse(response.body)
 
-      expect(body["error"]).to eq("Duration is required")
+      expect(body["error"]).to eq("Reserved pause not found")
     end
   end
 end

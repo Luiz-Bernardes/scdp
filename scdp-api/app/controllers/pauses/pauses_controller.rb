@@ -1,15 +1,33 @@
 module Pauses
   class PausesController < ApplicationController
-    def start
+    def reserve
       pause_type = PauseType.find(params[:pause_type_id])
 
-      result = Pauses::StartPauseService.new(
+      result = Pauses::ReservePauseService.new(
         user: current_user,
         pause_type: pause_type,
         selected_duration_minutes: params[:selected_duration_minutes]
       ).call
 
       render json: result, status: :created
+    rescue StandardError => e
+      render json: {
+        error: e.message
+      }, status: :unprocessable_content
+    end
+
+    def start
+      pause = current_user.pauses.reserved.find(params[:id])
+
+      result = Pauses::StartPauseService.new(
+        pause: pause
+      ).call
+
+      render json: result
+    rescue ActiveRecord::RecordNotFound
+      render json: {
+        error: "Reserved pause not found"
+      }, status: :not_found
     rescue StandardError => e
       render json: {
         error: e.message

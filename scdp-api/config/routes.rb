@@ -13,10 +13,13 @@ Rails.application.routes.draw do
   get "/auth/failure", to: "auth#failure"
 
   scope :pauses, module: :pauses do
-    post :start, to: 'pauses#start'
-    post ':id/finish', to: 'pauses#finish'
-    get :current, to: 'pauses#current'
-    get :history, to: 'pauses#history'
+    post :reserve, to: "pauses#reserve"
+
+    post ":id/start", to: "pauses#start"
+    post ":id/finish", to: "pauses#finish"
+
+    get :current, to: "pauses#current"
+    get :history, to: "pauses#history"
   end
 
   get "/teams/:id/pause_board", to: "teams#pause_board"

@@ -1,60 +1,16 @@
 module Pauses
   class StartPauseService
-    def initialize(user:, pause_type:, selected_duration_minutes: nil)
-      @user = user
-      @pause_type = pause_type
-      @team = pause_type.team
-      @selected_duration_minutes = selected_duration_minutes&.to_i
+    def initialize(pause:)
+      @pause = pause
     end
 
     def call
-      validate_active_pause!
-      validate_duration!
+      validate_reserved!
 
-      if pause_limit_reached?
-        return enqueue if @pause_type.requires_queue?
-        raise StandardError, "Pause limit reached"
-      end
-
-      create_pause
-    end
-
-    private
-
-    def validate_active_pause!
-      return unless @user.pauses.occupying_slot.exists?
-
-      raise StandardError, "User already has an active pause"
-    end
-
-    def validate_duration!
-      return unless @pause_type.has_time_limit?
-      return if @selected_duration_minutes.present?
-
-      raise StandardError, "Duration is required"
-    end
-
-    def pause_limit_reached?
-      @pause_type.pauses.occupying_slot.count >= @pause_type.max_concurrent
-    end
-
-    def enqueue
-      QueuePauseService.new(
-        user: @user,
-        pause_type: @pause_type,
-        selected_duration_minutes: @selected_duration_minutes
-      ).call
-    end
-
-    def create_pause
-      pause = Pause.create!(
-        user: @user,
-        team: @team,
-        pause_type: @pause_type,
-        selected_duration_minutes: @selected_duration_minutes,
+      pause.update!(
+        status: :active,
         started_at: Time.current,
-        expires_at: calculate_expires_at,
-        status: :active
+        expires_at: calculate_expires_at
       )
 
       Broadcasts::TeamPauseStateService.new(
@@ -65,13 +21,21 @@ module Pauses
       pause
     end
 
+    private
+
+    attr_reader :pause
+
+    def validate_reserved!
+      return if pause.reserved?
+
+      raise StandardError, "Pause is not reserved"
+    end
+
     def calculate_expires_at
-      return nil unless selected_duration_minutes.present?
+      return nil unless pause.pause_type.has_time_limit? &&
+                        pause.selected_duration_minutes.present?
 
-      Time.current + selected_duration_minutes.minutes
-    end  
-
-    attr_reader :selected_duration_minutes
-
+      Time.current + pause.selected_duration_minutes.minutes
+    end
   end
 end
