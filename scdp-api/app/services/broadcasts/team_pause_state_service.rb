@@ -22,7 +22,7 @@ module Broadcasts
     attr_reader :team, :pause_type
 
     def slots_payload
-      active_pauses = Pause.occupying_slot
+      occupying_pauses = Pause.occupying_slot
                            .includes(:user)
                            .where(
                              team: team,
@@ -30,14 +30,10 @@ module Broadcasts
                            )
                            .order(:started_at)
 
-      slots = active_pauses.map do |pause|
-        {
-          pause_id: pause.id,
-          user_id: pause.user.id,
-          user_name: pause.user.name,
-          selected_duration_minutes: pause.selected_duration_minutes,
-          started_at: pause.started_at
-        }
+      slots = occupying_pauses.map do |pause|
+        Teams::SlotPresenter.new(
+          pause: pause
+        ).call
       end
 
       remaining_slots = pause_type.max_concurrent - slots.size

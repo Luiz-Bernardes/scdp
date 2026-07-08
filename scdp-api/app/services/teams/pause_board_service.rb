@@ -22,7 +22,7 @@ module Teams
     attr_reader :team
 
     def build_slots(pause_type)
-      active_pauses = Pause.occupying_slot
+      occupying_pauses = Pause.occupying_slot
                            .includes(:user)
                            .where(
                              team: team,
@@ -30,28 +30,15 @@ module Teams
                            )
                            .order(:started_at)
 
-      slots = active_pauses.map do |pause|
-        timer = Pauses::TimerService.new(
+      slots = occupying_pauses.map do |pause|
+        Teams::SlotPresenter.new(
           pause: pause
-        )
-
-        {
-          pause_id: pause.id,
-          user_name: pause.user.name,
-          selected_duration_minutes: pause.selected_duration_minutes,
-          started_at: pause.started_at,
-          expires_at: pause.expires_at,
-          remaining_seconds: timer.remaining_seconds,
-          overtime_seconds: timer.overtime_seconds,
-          expired: timer.expired?,
-          status: timer.status,
-          progress_percentage: timer.progress_percentage
-        }
+        ).call
       end
 
-      remaining = pause_type.max_concurrent - slots.size
+      remaining_slots = pause_type.max_concurrent - slots.size
 
-      slots + Array.new(remaining, nil)
+      slots + Array.new(remaining_slots, nil)
     end
   end
 end
