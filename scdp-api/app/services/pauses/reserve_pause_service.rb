@@ -56,7 +56,9 @@ module Pauses
         team: @team,
         pause_type: @pause_type,
         selected_duration_minutes: selected_duration_minutes,
-        status: :reserved
+        status: :reserved,
+        started_at: nil,
+        expires_at: nil
       )
 
       Broadcasts::TeamPauseStateService.new(

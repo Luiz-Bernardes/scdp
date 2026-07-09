@@ -12,7 +12,7 @@ module Pauses
     end
 
     def overtime_seconds
-      return 0 unless expires_at
+      return nil unless expires_at
       return 0 unless expired?
 
       (Time.current - expires_at).to_i
@@ -30,16 +30,16 @@ module Pauses
     end
 
     def status
+      return "reserved" if pause.reserved?
       return "finished" if finished?
-      return "reserved" unless pause.started?
+      return "waiting_return" if pause.waiting_return?
       return "expired" if expired?
 
       "running"
     end
 
     def progress_percentage
-      return 0 unless pause.started_at
-      return 0 unless expires_at
+      return nil unless expires_at
       return 0 unless total_duration_seconds.positive?
 
       elapsed = Time.current - pause.started_at

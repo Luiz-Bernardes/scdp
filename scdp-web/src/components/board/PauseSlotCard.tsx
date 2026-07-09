@@ -1,41 +1,51 @@
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
-import { Slot } from "@/types/board";
-
 import { EmptySlotCard } from "./EmptySlotCard";
+import { PauseStatusBadge } from "./PauseStatusBadge";
 import { PauseTimer } from "./PauseTimer";
 
 type Props = {
-  slot: Slot;
+  slot: PauseSlot | null;
 };
 
 export function PauseSlotCard({
   slot
 }: Props) {
+  
+  console.log(slot);
   if (!slot) {
     return <EmptySlotCard />;
   }
 
   return (
-    <Card className="min-h-[140px]">
-      <h3 className="font-bold">
-        {slot.user_name}
-      </h3>
+    <Card className="min-h-[170px] flex flex-col justify-between">
 
-      <p>
-        Duração: {slot.selected_duration_minutes} min
-      </p>
+      <div className="space-y-2">
 
-      <p>
-        Restante:{" "}
-        <PauseTimer
-          remainingSeconds={slot.remaining_seconds}
-        />
-      </p>
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold">
+            {slot.user_name}
+          </h3>
 
-      <Badge>
-         Slot ocupado
-      </Badge>
+          <PauseStatusBadge
+            status={slot.status}
+          />
+        </div>
+
+        <p className="text-sm text-gray-600">
+          Duração:{" "}
+          {slot.selected_duration_minutes
+            ? `${slot.selected_duration_minutes} min`
+            : "Sem limite"}
+        </p>
+
+        <p className="text-sm">
+          Tempo restante:{" "}
+          <PauseTimer
+            remainingSeconds={slot.remaining_seconds}
+          />
+        </p>
+
+      </div>
 
     </Card>
   );

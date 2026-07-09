@@ -144,8 +144,7 @@ Pause.find_or_create_by!(
 ) do |pause|
   pause.started_at = 8.minutes.ago
   pause.selected_duration_minutes = 10
-  pause.ended_at = 2.minutes.from_now
-  pause.expires_at = 112.minutes.from_now
+  pause.expires_at = pause.started_at + pause.selected_duration_minutes.minutes
 end
 
 Pause.find_or_create_by!(
@@ -156,8 +155,7 @@ Pause.find_or_create_by!(
 ) do |pause|
   pause.started_at = 2.minutes.ago
   pause.selected_duration_minutes = 20
-  pause.ended_at = 18.minutes.from_now
-  pause.expires_at = 118.minutes.from_now
+  pause.expires_at = pause.started_at + pause.selected_duration_minutes.minutes
 end
 
 # ---------------------------------------------------
