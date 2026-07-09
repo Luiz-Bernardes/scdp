@@ -7,15 +7,20 @@ import { PauseActions } from "./PauseActions";
 
 type Props = {
   slot: PauseSlot | null;
+  pauseType: PauseType;
 };
 
 export function PauseSlotCard({
-  slot
+  slot,
+  pauseType
 }: Props) {
   
-  console.log(slot);
   if (!slot) {
-    return <EmptySlotCard />;
+    return (
+      <EmptySlotCard
+        pauseType={pauseType}
+      />
+    );
   }
 
   return (

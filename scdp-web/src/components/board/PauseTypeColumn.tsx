@@ -18,6 +18,7 @@ export function PauseTypeColumn({
           <PauseSlotCard
             key={index}
             slot={slot}
+            pauseType={pauseType}
           />
         ))}
       </div>

@@ -1,17 +1,16 @@
-import { ReactNode } from "react";
+import { HTMLAttributes } from "react";
 
-type Props = {
-  children: ReactNode;
-  className?: string;
-};
+type Props = HTMLAttributes<HTMLDivElement>;
 
 export function Card({
   children,
-  className = ""
+  className = "",
+  ...props
 }: Props) {
   return (
     <div
       className={`rounded-lg border p-4 ${className}`}
+      {...props}
     >
       {children}
     </div>
