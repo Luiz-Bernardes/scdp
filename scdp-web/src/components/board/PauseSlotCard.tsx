@@ -3,6 +3,7 @@ import { EmptySlotCard } from "./EmptySlotCard";
 import { PauseStatusBadge } from "./PauseStatusBadge";
 import { PauseTimer } from "./PauseTimer";
 import { PauseProgressBar } from "./PauseProgressBar";
+import { PauseActions } from "./PauseActions";
 
 type Props = {
   slot: PauseSlot | null;
@@ -51,6 +52,10 @@ export function PauseSlotCard({
         />
 
       </div>
+
+      <PauseActions
+        slot={slot}
+      />
 
     </Card>
   );
