@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/Card";
 import { EmptySlotCard } from "./EmptySlotCard";
 import { PauseStatusBadge } from "./PauseStatusBadge";
 import { PauseTimer } from "./PauseTimer";
+import { PauseProgressBar } from "./PauseProgressBar";
 
 type Props = {
   slot: PauseSlot | null;
@@ -44,6 +45,10 @@ export function PauseSlotCard({
             remainingSeconds={slot.remaining_seconds}
           />
         </p>
+
+        <PauseProgressBar
+          percentage={slot.progress_percentage}
+        />
 
       </div>
 
