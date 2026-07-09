@@ -126,7 +126,7 @@ banheiro = PauseType.find_or_create_by!(
   name: "Pausa Banheiro"
 ) do |p|
   p.has_time_limit = false
-  p.max_concurrent = 10
+  p.max_concurrent = 12
   p.requires_queue = true
   p.active = true
 end
