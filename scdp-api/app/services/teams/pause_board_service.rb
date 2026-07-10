@@ -11,6 +11,12 @@ module Teams
           {
             id: pause_type.id,
             name: pause_type.name,
+
+            has_time_limit: pause_type.has_time_limit,
+            max_duration_minutes: pause_type.max_duration_minutes,
+            max_concurrent: pause_type.max_concurrent,
+            requires_queue: pause_type.requires_queue,
+
             slots: build_slots(pause_type)
           }
         end
@@ -23,12 +29,12 @@ module Teams
 
     def build_slots(pause_type)
       occupying_pauses = Pause.occupying_slot
-                           .includes(:user)
-                           .where(
-                             team: team,
-                             pause_type: pause_type
-                           )
-                           .order(:started_at)
+                              .includes(:user)
+                              .where(
+                                team: team,
+                                pause_type: pause_type
+                              )
+                              .order(:started_at)
 
       slots = occupying_pauses.map do |pause|
         Teams::SlotPresenter.new(

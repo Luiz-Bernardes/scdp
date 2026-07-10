@@ -10,7 +10,13 @@ export type Slot = {
 export type PauseType = {
   id: number;
   name: string;
-  slots: Slot[];
+
+  has_time_limit: boolean;
+  max_duration_minutes: number | null;
+  max_concurrent: number;
+  requires_queue: boolean;
+
+  slots: (PauseSlot | null)[];
 };
 
 export type PauseBoard = {

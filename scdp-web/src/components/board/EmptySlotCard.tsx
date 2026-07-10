@@ -2,16 +2,19 @@ import { Card } from "@/components/ui/Card";
 
 type Props = {
   pauseType: PauseType;
+
+  onReserve(
+    pauseType: PauseType
+  ): void;
 };
 
 export function EmptySlotCard({
-  pauseType
+  pauseType,
+  onReserve
 }: Props) {
   return (
     <Card
-      onClick={() => {
-        console.log("reserve", pauseType.id);
-      }}
+      onClick={() => onReserve(pauseType)}
       className="
         min-h-[170px]
         cursor-pointer

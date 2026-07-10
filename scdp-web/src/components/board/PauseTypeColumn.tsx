@@ -4,10 +4,15 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 
 type Props = {
   pauseType: PauseType;
+
+  onReserve(
+    pauseType: PauseType
+  ): void;
 };
 
 export function PauseTypeColumn({
-  pauseType
+  pauseType,
+  onReserve
 }: Props) {
   return (
     <section className="mb-10">
@@ -19,6 +24,7 @@ export function PauseTypeColumn({
             key={index}
             slot={slot}
             pauseType={pauseType}
+            onReserve={onReserve}
           />
         ))}
       </div>

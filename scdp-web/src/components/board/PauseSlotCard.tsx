@@ -8,17 +8,23 @@ import { PauseActions } from "./PauseActions";
 type Props = {
   slot: PauseSlot | null;
   pauseType: PauseType;
+
+  onReserve(
+    pauseType: PauseType
+  ): void;
 };
 
 export function PauseSlotCard({
   slot,
-  pauseType
+  pauseType,
+  onReserve
 }: Props) {
   
   if (!slot) {
     return (
       <EmptySlotCard
         pauseType={pauseType}
+        onReserve={onReserve}
       />
     );
   }
