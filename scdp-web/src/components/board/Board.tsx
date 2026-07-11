@@ -11,6 +11,7 @@ import { PageTitle } from "@/components/ui/PageTitle";
 
 import { useReservePause } from "@/hooks/useReservePause";
 import { useStartPause } from "@/hooks/useStartPause";
+import { useFinishPause } from "@/hooks/useFinishPause";
 
 type Props = {
   board: PauseBoard;
@@ -35,6 +36,10 @@ export function Board({
   const {
     start
   } = useStartPause();
+
+  const {
+    finish
+  } = useFinishPause();
 
   function handleReserveClick(
     pauseType: PauseType
@@ -74,10 +79,22 @@ export function Board({
     }
   }
 
-  function handleFinish(
+  async function handleFinish(
     pauseId: number
   ) {
-    console.log("finish", pauseId);
+    try {
+      await finish(pauseId);
+
+      alert(
+        "Pausa finalizada! Atualize a página (F5)."
+      );
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        "Não foi possível finalizar a pausa."
+      );
+    }
   }
 
   return (

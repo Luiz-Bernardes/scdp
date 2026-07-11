@@ -26,3 +26,13 @@ export async function startPause(
 
   return response.data;
 }
+
+export async function finishPause(
+  pauseId: number
+) {
+  const response = await api.post(
+    `/pauses/${pauseId}/finish`
+  );
+
+  return response.data;
+}
