@@ -16,3 +16,13 @@ export async function reservePause({
 
   return response.data;
 }
+
+export async function startPause(
+  pauseId: number
+) {
+  const response = await api.post(
+    `/pauses/${pauseId}/start`
+  );
+
+  return response.data;
+}

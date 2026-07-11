@@ -8,11 +8,21 @@ type Props = {
   onReserve(
     pauseType: PauseType
   ): void;
+
+  onStart(
+    pauseId: number
+  ): void;
+
+  onFinish(
+    pauseId: number
+  ): void;
 };
 
 export function PauseTypeColumn({
   pauseType,
-  onReserve
+  onReserve,
+  onStart,
+  onFinish
 }: Props) {
   return (
     <section className="mb-10">
@@ -25,6 +35,8 @@ export function PauseTypeColumn({
             slot={slot}
             pauseType={pauseType}
             onReserve={onReserve}
+            onStart={onStart}
+            onFinish={onFinish}
           />
         ))}
       </div>

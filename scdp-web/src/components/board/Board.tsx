@@ -10,6 +10,7 @@ import { ReservePauseModal } from "./ReservePauseModal";
 import { PageTitle } from "@/components/ui/PageTitle";
 
 import { useReservePause } from "@/hooks/useReservePause";
+import { useStartPause } from "@/hooks/useStartPause";
 
 type Props = {
   board: PauseBoard;
@@ -31,6 +32,10 @@ export function Board({
     loading
   } = useReservePause();
 
+  const {
+    start
+  } = useStartPause();
+
   function handleReserveClick(
     pauseType: PauseType
   ) {
@@ -51,6 +56,30 @@ export function Board({
     setOpen(false);
   }
 
+  async function handleStart(
+    pauseId: number
+  ) {
+    try {
+      await start(pauseId);
+
+      alert(
+        "Pausa iniciada! Atualize a página (F5)."
+      );
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        "Não foi possível iniciar a pausa."
+      );
+    }
+  }
+
+  function handleFinish(
+    pauseId: number
+  ) {
+    console.log("finish", pauseId);
+  }
+
   return (
     <main className="p-8">
 
@@ -63,6 +92,8 @@ export function Board({
           key={pauseType.id}
           pauseType={pauseType}
           onReserve={handleReserveClick}
+          onStart={handleStart}
+          onFinish={handleFinish}
         />
       ))}
 

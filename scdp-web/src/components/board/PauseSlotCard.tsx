@@ -12,12 +12,22 @@ type Props = {
   onReserve(
     pauseType: PauseType
   ): void;
+
+  onStart(
+      pauseId: number
+    ): void;
+
+  onFinish(
+    pauseId: number
+  ): void;
 };
 
 export function PauseSlotCard({
   slot,
   pauseType,
-  onReserve
+  onReserve,
+  onStart,
+  onFinish
 }: Props) {
   
   if (!slot) {
@@ -66,6 +76,8 @@ export function PauseSlotCard({
 
       <PauseActions
         slot={slot}
+        onStart={onStart}
+        onFinish={onFinish}
       />
 
     </Card>

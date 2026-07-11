@@ -1,9 +1,19 @@
 type Props = {
   slot: PauseSlot;
+
+  onStart(
+    pauseId: number
+  ): void;
+
+  onFinish(
+    pauseId: number
+  ): void;
 };
 
 export function PauseActions({
-  slot
+  slot,
+  onStart,
+  onFinish
 }: Props) {
   return (
     <div className="mt-4 flex gap-2">
@@ -11,7 +21,7 @@ export function PauseActions({
       {slot.can_start && (
         <button
           onClick={() => {
-            console.log("start", slot.pause_id);
+            onStart(slot.pause_id)
           }}
           className="
             rounded
@@ -29,7 +39,7 @@ export function PauseActions({
       {slot.can_finish && (
         <button
           onClick={() => {
-            console.log("finish", slot.pause_id);
+            onFinish(slot.pause_id)
           }}
           className="
             rounded
