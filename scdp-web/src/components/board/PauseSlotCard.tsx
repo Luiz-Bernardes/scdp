@@ -4,6 +4,7 @@ import { PauseStatusBadge } from "./PauseStatusBadge";
 import { PauseTimer } from "./PauseTimer";
 import { PauseProgressBar } from "./PauseProgressBar";
 import { PauseActions } from "./PauseActions";
+import { useLivePause } from "@/hooks/useLivePause";
 
 type Props = {
   slot: PauseSlot | null;
@@ -39,6 +40,8 @@ export function PauseSlotCard({
     );
   }
 
+  const live = useLivePause(slot);
+
   return (
     <Card className="min-h-[170px] flex flex-col justify-between">
 
@@ -50,7 +53,7 @@ export function PauseSlotCard({
           </h3>
 
           <PauseStatusBadge
-            status={slot.status}
+            status={live.status}
           />
         </div>
 
@@ -64,12 +67,12 @@ export function PauseSlotCard({
         <p className="text-sm">
           Tempo restante:{" "}
           <PauseTimer
-            remainingSeconds={slot.remaining_seconds}
+            remainingSeconds={live.remainingSeconds}
           />
         </p>
 
         <PauseProgressBar
-          percentage={slot.progress_percentage}
+          percentage={live.progressPercentage}
         />
 
       </div>
