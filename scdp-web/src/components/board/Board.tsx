@@ -53,12 +53,23 @@ export function Board({
   ) {
     if (!selectedPauseType) return;
 
-    await reserve(
-      selectedPauseType.id,
-      duration
-    );
+    try {
+      await reserve(
+        selectedPauseType.id,
+        duration
+      );
 
-    setOpen(false);
+      setOpen(false);
+
+      alert(
+        "Pausa reservada com sucesso! Atualize a página."
+      );
+    } catch (error: any) {
+      alert(
+        error.response?.data?.error ??
+        "Não foi possível reservar a pausa."
+      );
+    }
   }
 
   async function handleStart(
