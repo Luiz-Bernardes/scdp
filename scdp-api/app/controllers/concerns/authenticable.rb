@@ -19,14 +19,9 @@ module Authenticable
     end
 
     begin
-      decoded = JWT.decode(
-        token,
-        ENV['JWT_SECRET_KEY'],
-        true,
-        algorithm: 'HS256'
-      )
+      payload = Auth::JwtService.decode(token)
 
-      @current_user = User.find(decoded[0]['user_id'])
+      @current_user = User.find(payload["user_id"])
     rescue JWT::DecodeError, ActiveRecord::RecordNotFound
       render json: {
         error: 'Invalid token'
