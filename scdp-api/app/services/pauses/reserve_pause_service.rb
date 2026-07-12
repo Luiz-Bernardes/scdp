@@ -61,10 +61,10 @@ module Pauses
         expires_at: nil
       )
 
-      # Broadcasts::TeamPauseStateService.new(
-      #   team: pause.team,
-      #   pause_type: pause.pause_type
-      # ).call
+      Broadcasts::TeamPauseStateService.new(
+        team: pause.team,
+        pause_type: pause.pause_type
+      ).call
 
       pause
     end
