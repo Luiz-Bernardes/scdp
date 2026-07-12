@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 
+import { PauseBoard } from "@/types/board";
 import { createCable } from "@/lib/cable";
 
 export function usePauseBoardCable(
-  teamId?: number
+  teamId: number | undefined,
+  setBoard: Dispatch<
+    SetStateAction<PauseBoard | null>
+  >
 ) {
 
   useEffect(() => {
@@ -29,7 +34,31 @@ export function usePauseBoardCable(
           },
 
           received(data) {
-            console.log(data);
+            console.log("Broadcast:", data);
+
+            if (data.type !== "pause_state_updated") {
+              return;
+            }
+
+            setBoard((current) => {
+              if (!current) return current;
+
+              return {
+                ...current,
+                pause_types: current.pause_types.map(
+                  (pauseType) => {
+                    if (pauseType.id !== data.pause_type_id) {
+                      return pauseType;
+                    }
+
+                    return {
+                      ...pauseType,
+                      slots: data.slots
+                    };
+                  }
+                )
+              };
+            });
           }
         }
       );

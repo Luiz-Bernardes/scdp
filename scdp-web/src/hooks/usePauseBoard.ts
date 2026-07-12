@@ -22,6 +22,7 @@ export function usePauseBoard(teamId?: number) {
 
   return {
     board,
+    setBoard,
     loading
   };
 }

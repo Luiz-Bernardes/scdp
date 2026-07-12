@@ -11,11 +11,15 @@ export default function BoardContent() {
 
   const user = useAuthStore((state) => state.user);
 
-  const { board, loading } = 
-    usePauseBoard(user?.team_ids[0]);
+  const {
+    board,
+    setBoard,
+    loading
+  } = usePauseBoard(user?.team_ids[0]);
 
   usePauseBoardCable(
-    user?.team_ids[0]
+    user?.team_ids[0],
+    setBoard
   );
 
   if (loading) {

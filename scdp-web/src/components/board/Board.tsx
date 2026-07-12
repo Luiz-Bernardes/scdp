@@ -61,9 +61,7 @@ export function Board({
 
       setOpen(false);
 
-      alert(
-        "Pausa reservada com sucesso! Atualize a página."
-      );
+      // alert("Pausa reservada com sucesso! Atualize a página.");
     } catch (error: any) {
       alert(
         error.response?.data?.error ??
@@ -78,9 +76,7 @@ export function Board({
     try {
       await start(pauseId);
 
-      alert(
-        "Pausa iniciada! Atualize a página (F5)."
-      );
+      // alert("Pausa iniciada! Atualize a página (F5).");
     } catch (error) {
       console.error(error);
 
@@ -96,9 +92,7 @@ export function Board({
     try {
       await finish(pauseId);
 
-      alert(
-        "Pausa finalizada! Atualize a página (F5)."
-      );
+      // alert("Pausa finalizada! Atualize a página (F5).");
     } catch (error) {
       console.error(error);
 
