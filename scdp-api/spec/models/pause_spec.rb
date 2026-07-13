@@ -20,7 +20,8 @@ RSpec.describe Pause, type: :model do
           reserved: 0,
           active: 1,
           waiting_return: 2,
-          finished: 3
+          finished: 3,
+          expired: 4
         )
     end
   end

@@ -7,10 +7,11 @@ class Pause < ApplicationRecord
     reserved: 0,
     active: 1,
     waiting_return: 2,
-    finished: 3
+    finished: 3,
+    expired: 4
   }
 
-  validates :started_at,presence: true, unless: :reserved?
+  validates :started_at, presence: true, if: :started?
 
   # Methods
   def occupying_slot?
@@ -51,6 +52,6 @@ class Pause < ApplicationRecord
   }
 
   scope :history, -> {
-    where(status: :finished)
+    where(status: [:finished, :expired])
   }
 end

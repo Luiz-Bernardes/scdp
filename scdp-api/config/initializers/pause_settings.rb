@@ -1,3 +1,4 @@
 module PauseSettings
-  RESERVATION_TIMEOUT = 30.seconds
+  RESERVE_EXPIRE_TIMEOUT = 5.minutes
+  WAITING_EXPIRE_TIMEOUT = 30.minutes
 end

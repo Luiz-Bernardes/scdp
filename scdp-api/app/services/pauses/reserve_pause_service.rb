@@ -61,6 +61,13 @@ module Pauses
         expires_at: nil
       )
 
+      ExpirePauseJob.set(
+        wait: PauseSettings::RESERVE_EXPIRE_TIMEOUT
+      ).perform_later(
+        pause.id,
+        "reserved"
+      )
+
       Broadcasts::TeamPauseStateService.new(
         team: pause.team,
         pause_type: pause.pause_type

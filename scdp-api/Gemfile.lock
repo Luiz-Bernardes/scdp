@@ -289,6 +289,8 @@ GEM
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
     redis-client (0.30.0)
       connection_pool
     regexp_parser (2.12.0)
@@ -409,6 +411,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rack-cors
   rails (~> 7.2.3, >= 7.2.3.1)
+  redis
   rspec-rails
   rubocop-rails-omakase
   shoulda-matchers
