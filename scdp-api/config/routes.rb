@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   require "sidekiq/web"
 
+  namespace :admin do
+    resources :users
+  end
+
   mount Sidekiq::Web => "/sidekiq"
   mount ActionCable.server => "/cable"
 
