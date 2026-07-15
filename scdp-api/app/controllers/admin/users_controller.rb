@@ -3,32 +3,39 @@ module Admin
     before_action :authorize_manage_users!
 
     def index
-      users = User.order(:name)
+      users = User.where(active: true).order(:name)
 
-      render json: users
+      render json: users.map { |user|
+        Admin::UserPresenter.new(
+         user: user
+        ).call
+      }
     end
 
     def show
-      render json: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        active: user.active
-      }
+      render json:
+        Admin::UserPresenter.new(
+          user: user
+        ).call
     end
 
     def create
       user = User.create!(user_params)
 
-      render json: user,
-             status: :created
+      render json:
+        Admin::UserPresenter.new(
+          user: user
+        ).call,
+        status: :created
     end
 
     def update
       user.update!(user_params)
 
-      render json: user
+      render json:
+        Admin::UserPresenter.new(
+          user: user
+        ).call
     end
 
     def destroy
