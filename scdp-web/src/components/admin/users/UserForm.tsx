@@ -6,7 +6,6 @@ import { UserRole } from "@/types/admin";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
 import { Select } from "@/components/ui/Select";
 import { FormField } from "@/components/ui/FormField";
 
@@ -20,6 +19,7 @@ export type UserFormValues = {
 };
 
 type Props = {
+  mode?: "create" | "edit";
   initialValues?: UserFormValues;
   loading: boolean;
   onSubmit(
@@ -33,14 +33,8 @@ const defaultValues: UserFormValues = {
   role: "agent"
 };
 
-const roles: UserRole[] = [
-  "agent",
-  "supervisor",
-  "admin",
-  "super_admin"
-];
-
 export function UserForm({
+  mode = "create",
   initialValues = defaultValues,
   loading,
   onSubmit
@@ -116,8 +110,17 @@ export function UserForm({
           </Select>
         </FormField>
 
-        <Button type="submit" disabled={loading}>
-          Salvar
+        <Button
+          type="submit"
+          disabled={loading}
+        >
+
+          {loading
+            ? "Salvando..."
+            : mode === "edit"
+              ? "Atualizar"
+              : "Salvar"}
+
         </Button>
 
       </form>
