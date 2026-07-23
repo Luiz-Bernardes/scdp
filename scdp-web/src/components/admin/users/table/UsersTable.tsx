@@ -1,102 +1,75 @@
 "use client";
 
-import Link from "next/link";
+import { Card } from "@/components/ui/Card";
 
 import { AdminUser } from "@/types/admin";
 
+import { UserTableRow } from "./UserTableRow";
+
 type Props = {
   users: AdminUser[];
+
+  onDelete(
+    id: number
+  ): void;
 };
 
 export function UsersTable({
-  users
+  users,
+  onDelete
 }: Props) {
 
   return (
 
-    <table className="w-full border-collapse bg-white">
+    <Card className="overflow-hidden">
 
-      <thead>
+      <table className="w-full border-collapse">
 
-        <tr className="border-b">
+        <thead>
 
-          <th className="p-3 text-left">
-            Nome
-          </th>
+          <tr className="border-b bg-gray-50">
 
-          <th className="p-3 text-left">
-            Email
-          </th>
+            <th className="p-3 text-left">
+              Nome
+            </th>
 
-          <th className="p-3 text-left">
-            Cargo
-          </th>
+            <th className="p-3 text-left">
+              Email
+            </th>
 
-          <th className="p-3 text-center">
-            Status
-          </th>
+            <th className="p-3 text-left">
+              Cargo
+            </th>
 
-          <th className="p-3 text-center">
-            Ações
-          </th>
+            <th className="p-3 text-center">
+              Status
+            </th>
 
-        </tr>
-
-      </thead>
-
-      <tbody>
-
-        {users.map((user) => (
-
-          <tr
-            key={user.id}
-            className="border-b"
-          >
-
-            <td className="p-3">
-              {user.name}
-            </td>
-
-            <td className="p-3">
-              {user.email}
-            </td>
-
-            <td className="p-3">
-              {user.role}
-            </td>
-
-            <td className="p-3 text-center">
-
-              {user.active
-                ? "Ativo"
-                : "Inativo"}
-
-            </td>
-
-            <td className="space-x-2 p-3 text-center">
-
-              <Link
-                href={`/admin/users/${user.id}/edit`}
-                className="text-blue-600"
-              >
-                Editar
-              </Link>
-
-              <button
-                className="text-red-600"
-              >
-                Desativar
-              </button>
-
-            </td>
+            <th className="p-3 text-center">
+              Ações
+            </th>
 
           </tr>
 
-        ))}
+        </thead>
 
-      </tbody>
+        <tbody>
 
-    </table>
+          {users.map((user) => (
+
+            <UserTableRow
+              key={user.id}
+              user={user}
+              onDelete={onDelete}
+            />
+
+          ))}
+
+        </tbody>
+
+      </table>
+
+    </Card>
 
   );
 
