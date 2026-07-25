@@ -1,4 +1,4 @@
-import { NewUserPage } from "@/components/admin/users/NewUserPage";
+import { NewUserPage } from "@/components/admin/users";
 
 export default function Page() {
   return <NewUserPage />;

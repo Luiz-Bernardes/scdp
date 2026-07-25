@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { Loading } from "@/components/ui/Loading";
-import { UsersTable } from "@/components/admin/users/UsersTable";
+import { UsersTable } from "@/components/admin/users/table/UsersTable";
 
 import { useUsers } from "@/hooks/admin/useUsers";
 
