@@ -52,7 +52,7 @@ export function UserForm({
     );
 
   function handleSubmit(
-    event: React.FormEvent
+    event: React.FormEvent<HTMLFormElement>
   ) {
 
     event.preventDefault();
@@ -71,7 +71,9 @@ export function UserForm({
 
         <FormField label="Nome" required>
           <Input
+            disabled={loading}
             value={name}
+            autoComplete="name"
             onChange={(e) =>
               setName(e.target.value)
             }
@@ -80,8 +82,10 @@ export function UserForm({
 
         <FormField label="Email" required>
           <Input
+            disabled={loading}
             type="email"
             value={email}
+            autoComplete="email"
             onChange={(e) =>
               setEmail(e.target.value)
             }
@@ -90,6 +94,7 @@ export function UserForm({
 
         <FormField label="Cargo" required>
           <Select
+            disabled={loading}
             value={role}
             onChange={(e) =>
               setRole(
