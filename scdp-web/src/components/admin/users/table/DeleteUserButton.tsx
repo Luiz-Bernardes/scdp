@@ -29,7 +29,6 @@ export function DeleteUserButton({
     }
 
     await onDelete(id);
-
   }
 
   return (

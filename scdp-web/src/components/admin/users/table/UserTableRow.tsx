@@ -20,7 +20,6 @@ export function UserTableRow({
   user,
   onDelete
 }: Props) {
-
   return (
 
     <tr className="border-b">
@@ -55,7 +54,8 @@ export function UserTableRow({
         </Link>
 
         <DeleteUserButton
-          user={user}
+          id={user.id}
+          name={user.name}
           onDelete={onDelete}
         />
 
