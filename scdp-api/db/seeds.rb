@@ -5,6 +5,7 @@ Pause.delete_all
 PauseType.delete_all
 TeamMembership.delete_all
 Team.delete_all
+User.delete_all
 
 puts "=============================="
 puts "Criando dados de desenvolvimento..."
@@ -31,6 +32,13 @@ end
 luiz = User.find_or_create_by!(email: "luizhenbernardes@gmail.com") do |u|
   u.name = "Luiz Bernardes"
   u.role = :agent
+  u.provider = "google"
+  u.provider_uid = SecureRandom.uuid
+end
+
+luiz = User.find_or_create_by!(email: "lzzbernardes@gmail.com") do |u|
+  u.name = "Lzz"
+  u.role = :admin
   u.provider = "google"
   u.provider_uid = SecureRandom.uuid
 end
