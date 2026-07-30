@@ -36,7 +36,7 @@ luiz = User.find_or_create_by!(email: "luizhenbernardes@gmail.com") do |u|
   u.provider_uid = SecureRandom.uuid
 end
 
-luiz = User.find_or_create_by!(email: "lzzbernardes@gmail.com") do |u|
+lzz = User.find_or_create_by!(email: "lzzbernardes@gmail.com") do |u|
   u.name = "Lzz"
   u.role = :admin
   u.provider = "google"
@@ -88,6 +88,7 @@ end
   admin,
   supervisor,
   luiz,
+  lzz,
   pedro,
   ana,
   joao,
