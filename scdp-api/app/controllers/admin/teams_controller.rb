@@ -22,9 +22,14 @@ module Admin
     end
 
     def create
-      team = Team.create!(
+      team = Team.new(
         team_params
       )
+
+      team.created_by =
+        current_user
+
+      team.save!
 
       render json:
         Admin::TeamPresenter.new(

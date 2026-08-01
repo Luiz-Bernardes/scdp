@@ -8,4 +8,14 @@ module Authorizable
       }, status: :forbidden
     end
   end
+
+  def authorize_manage_teams!
+    unless current_user.super_admin? ||
+           current_user.admin?
+
+      render json: {
+        error: "Forbidden"
+      }, status: :forbidden
+    end
+  end
 end
