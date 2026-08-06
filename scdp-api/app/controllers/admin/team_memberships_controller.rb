@@ -70,8 +70,9 @@ module Admin
       params
         .require(:team_membership)
         .permit(
-          :user_id,
-          :team_id
+          :email,
+          :team_id,
+          :team_role
         )
     end
   end
