@@ -7,12 +7,14 @@ module Admin
     def call
       {
         id: pause_type.id,
-        team_id: pause_type.team_id,
         name: pause_type.name,
+        active: pause_type.active,
         has_time_limit: pause_type.has_time_limit,
+        max_duration_minutes: pause_type.max_duration_minutes,
         max_concurrent: pause_type.max_concurrent,
         requires_queue: pause_type.requires_queue,
-        active: pause_type.active,
+        team_id: pause_type.team_id,
+        team_name: pause_type.team.name,
         created_at: pause_type.created_at,
         updated_at: pause_type.updated_at
       }
