@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :users
     resources :teams
     resources :team_memberships
+    resources :pause_types
   end
 
   mount Sidekiq::Web => "/sidekiq"
