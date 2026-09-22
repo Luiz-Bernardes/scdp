@@ -1,6 +1,6 @@
 # SCDP
 
-Sistema de Controle e Gestão de Pausas.
+Sistema Corporativo de Pausas.
 
 O SCDP é um sistema para gerenciamento de pausas de colaboradores, permitindo controlar equipes, usuários, tipos de pausa, pausas em andamento e filas de espera em tempo real.
 
@@ -176,6 +176,46 @@ scdp/
 │   └── ...
 │
 └── README.md
+```
+## Estrutura exemplo de uma entidade
+
+```text
+components/admin/pause-types/
+├── table/
+│   ├── PauseTypesTable.tsx
+│   ├── PauseTypeTableRow.tsx
+│   └── DeletePauseTypeButton.tsx
+├── form/
+│   └── PauseTypeForm.tsx
+├── pages/
+│   ├── PauseTypesPage.tsx
+│   ├── NewPauseTypePage.tsx
+│   └── EditPauseTypePage.tsx
+└── index.ts
+
+E:
+
+hooks/admin/
+├── usePauseTypes.ts
+├── usePauseType.ts
+└── usePauseTypeActions.ts
+
+services/admin/
+└── pause-type-service.ts
+
+app/admin/pause-types/
+├── page.tsx
+├── new/
+│   └── page.tsx
+└── [id]/
+    └── edit/
+        └── page.tsx
+
+No backend:
+
+app/controllers/admin/pause_types_controller.rb
+app/services/admin/pause_type_presenter.rb
+spec/requests/admin/pause_types_spec.rb
 ```
 
 ## Desenvolvimento
