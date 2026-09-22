@@ -251,4 +251,21 @@ O funcionalidade principal do projeto o board, já funciona normalmente.
 
 Está pendende algumas melhorias de layout, tratamento de mensagens de erro e experiência do usuário (UX).
 
-
+<table>
+  <tr>
+    <td><img src="docs/images/img1.png" width="400"></td>
+    <td><img src="docs/images/img2.png" width="400"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/img3.png" width="400"></td>
+    <td><img src="docs/images/img4.png" width="400"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/img5.png" width="400"></td>
+    <td><img src="docs/images/img6.png" width="400"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/img7.png" width="400"></td>
+    <td><img src="docs/images/img8.png" width="400"></td>
+  </tr>
+</table>
